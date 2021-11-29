@@ -1,16 +1,6 @@
 import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js";
 
-const renderer = new THREE.WebGLRenderer({antialias: true});
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
-
-document.body.appendChild(renderer.domElement);
-
-window.addEventListener('resize', () => {
-  this._OnWindowResize();
-}, false);
+const scene = new THREE.Scene();
 
 const fov = 60;
 const aspect = window.innerWidth / window.innerHeight;
@@ -20,9 +10,23 @@ const far = 1000.0;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 camera.position.set(75, 20, 0);
 
-const scene = new THREE.Scene();
+const renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-let light = new THREE.DirectionalLight(0xFFFFFF, 1.0);
+
+window.addEventListener('resize', () => {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+});
+// const directionalLight = new THREE.DirectionalLight( 0xffffff, 1.0 );
+// scene.add( directionalLight );
+//
+let light = new THREE.DirectionalLight(0xFFFFFF, 2.0);
 light.position.set(20, 100, 10);
 light.target.position.set(0, 0, 0);
 light.castShadow = true;
@@ -35,11 +39,11 @@ light.shadow.camera.left = 100;
 light.shadow.camera.right = -100;
 light.shadow.camera.top = 100;
 light.shadow.camera.bottom = -100;
+scene.add( light );
 
-scene.add(light);
 
-light = new THREE.AmbientLight(0x101010);
-scene.add(light);
+// let light = new THREE.AmbientLight(0x101010);
+// scene.add(light);
 
 const controls = new OrbitControls(
   camera, renderer.domElement
@@ -49,11 +53,37 @@ controls.update();
 
 const loader = new THREE.CubeTextureLoader();
 const texture = loader.load([
-  './assets/negx.jpg',
-  './assets/negy.jpg',
-  './assets/negz.jpg',
-  './assets/posx.jpg',
-  './assets/posy.jpg',
-  './assets/posz.jpg'
+  '/assets/posx.jpg',
+  '/assets/negx.jpg',
+  '/assets/posy.jpg',
+  '/assets/negy.jpg',
+  '/assets/posz.jpg',
+  '/assets/negz.jpg'
 ]);
-scene.background = texture;
+ scene.background = texture;
+
+ //plane
+const geometry = new THREE.PlaneGeometry(100, 100, 10, 10)
+const material = new THREE.MeshPhysicalMaterial({color: 0xFFFFFF});
+const plane = new THREE.Mesh(geometry, material)
+plane.castShadow = false;
+plane.receiveShadow = true;
+plane.rotation.x = -Math.PI / 2;
+scene.add(plane);
+
+//cubes
+const cubeGeometry = new THREE.BoxGeometry(10, 10, 10);
+const cubeMaterial = new THREE.MeshStandardMaterial({color: 0x00ff00});
+const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+cube.position.set(0, 10, 0);
+cube.castShadow = true;
+cube.receiveShadow = true;
+scene.add(cube);
+
+const song = new Audio('/assets/Closer.mp3');
+const animate = () => {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera)
+}
+
+animate();
