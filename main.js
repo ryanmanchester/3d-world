@@ -1,5 +1,7 @@
+import * as THREE from './vendor/three/build/three.module.js';
 import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js';
+import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/FBXLoader.js';
 
 const scene = new THREE.Scene();
 
@@ -43,8 +45,8 @@ light.shadow.camera.bottom = -100;
 scene.add( light );
 
 
-// let light = new THREE.AmbientLight(0x101010);
-// scene.add(light);
+let ambLight = new THREE.AmbientLight(0x101010);
+scene.add(ambLight);
 
 const controls = new OrbitControls(
   camera, renderer.domElement
@@ -65,7 +67,7 @@ const texture = wolrdLoader.load([
 
  //plane
 const geometry = new THREE.PlaneGeometry(100, 100, 10, 10)
-const material = new THREE.MeshPhysicalMaterial({color: 0xFFFFFF});
+const material = new THREE.MeshStandardMaterial({color: 0xa6a6a6});
 const plane = new THREE.Mesh(geometry, material)
 plane.castShadow = false;
 plane.receiveShadow = true;
@@ -75,9 +77,13 @@ scene.add(plane);
 //3D model
 const loader = new GLTFLoader();
 loader.load('/assets/squid_game_soldier', (gltf) => {
-  const mesh = gltf.scene.children[0]
-  scene.add(mesh);
+  scene.add(gltf.scene);
+}, undefined, (error) => {
+  console.error(error)
 })
+
+//Animation loader
+
 
 //cubes
 // const cubeGeometry = new THREE.BoxGeometry(10, 10, 10);
