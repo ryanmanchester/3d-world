@@ -1,4 +1,5 @@
 import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js';
 
 const scene = new THREE.Scene();
 
@@ -51,8 +52,8 @@ const controls = new OrbitControls(
 controls.target.set(0, 20, 0);
 controls.update();
 
-const loader = new THREE.CubeTextureLoader();
-const texture = loader.load([
+const wolrdLoader = new THREE.CubeTextureLoader();
+const texture = wolrdLoader.load([
   '/assets/posx.jpg',
   '/assets/negx.jpg',
   '/assets/posy.jpg',
@@ -71,14 +72,21 @@ plane.receiveShadow = true;
 plane.rotation.x = -Math.PI / 2;
 scene.add(plane);
 
+//3D model
+const loader = new GLTFLoader();
+loader.load('/assets/squid_game_soldier', (gltf) => {
+  const mesh = gltf.scene.children[0]
+  scene.add(mesh);
+})
+
 //cubes
-const cubeGeometry = new THREE.BoxGeometry(10, 10, 10);
-const cubeMaterial = new THREE.MeshStandardMaterial({color: 0x00ff00});
-const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-cube.position.set(0, 10, 0);
-cube.castShadow = true;
-cube.receiveShadow = true;
-scene.add(cube);
+// const cubeGeometry = new THREE.BoxGeometry(10, 10, 10);
+// const cubeMaterial = new THREE.MeshStandardMaterial({color: 0x00ff00});
+// const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+// cube.position.set(0, 10, 0);
+// cube.castShadow = true;
+// cube.receiveShadow = true;
+// scene.add(cube);
 
 const song = new Audio('/assets/Closer.mp3');
 const animate = () => {
