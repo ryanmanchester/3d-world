@@ -75,22 +75,22 @@ plane.rotation.x = -Math.PI / 2;
 scene.add(plane);
 
 //3D model
-const loader = new GLTFLoader();
-loader.load('./assets/squid_game_soldier/', (gltf) => {
-  scene.add(gltf.scene);
-}
+// const loader = new GLTFLoader();
+// loader.load('./assets/squid_game_soldier/', (gltf) => {
+//   scene.add(gltf.scene);
+// }
 
 //Animation loader
 
 
 //cubes
-// const cubeGeometry = new THREE.BoxGeometry(10, 10, 10);
-// const cubeMaterial = new THREE.MeshStandardMaterial({color: 0x00ff00});
-// const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-// cube.position.set(0, 10, 0);
-// cube.castShadow = true;
-// cube.receiveShadow = true;
-// scene.add(cube);
+const cubeGeometry = new THREE.BoxGeometry(10, 10, 10);
+const cubeMaterial = new THREE.MeshStandardMaterial({color: 0x00ff00});
+const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+cube.position.set(0, 10, 0);
+cube.castShadow = true;
+cube.receiveShadow = true;
+scene.add(cube);
 
 const song = new Audio('/assets/Closer.mp3');
 const animate = () => {
