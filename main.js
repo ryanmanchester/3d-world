@@ -56,12 +56,12 @@ controls.update();
 
 const wolrdLoader = new THREE.CubeTextureLoader();
 const texture = wolrdLoader.load([
-  '/assets/posx.jpg',
-  '/assets/negx.jpg',
-  '/assets/posy.jpg',
-  '/assets/negy.jpg',
-  '/assets/posz.jpg',
-  '/assets/negz.jpg'
+  './assets/posx.jpg',
+  './assets/negx.jpg',
+  './assets/posy.jpg',
+  './assets/negy.jpg',
+  './assets/posz.jpg',
+  './assets/negz.jpg'
 ]);
  scene.background = texture;
 
@@ -76,11 +76,9 @@ scene.add(plane);
 
 //3D model
 const loader = new GLTFLoader();
-loader.load('/assets/squid_game_soldier', (gltf) => {
+loader.load('./assets/squid_game_soldier/', (gltf) => {
   scene.add(gltf.scene);
-}, undefined, (error) => {
-  console.error(error)
-})
+}
 
 //Animation loader
 
